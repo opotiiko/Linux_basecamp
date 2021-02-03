@@ -60,7 +60,7 @@ print_info() {
 
 check_linux() {
 	local system=$(uname)
-	
+
 	[ "$system" = "Linux" ] && return 0
 	p_red "You should run this script on the Linux system!\n"
 	return 1
@@ -68,7 +68,7 @@ check_linux() {
 
 check_ubuntu() {
 	SYSTEM=$(uname -a | grep -o "[^~]*Ubuntu")
-	
+
 	[ "$SYSTEM" != "${SYSTEM/Ubuntu/}" ] && return 0
 	p_red "This script is written for Ubuntu system! It could be failed on another operational system.\n"
 	return 0
@@ -76,11 +76,11 @@ check_ubuntu() {
 
 check_username() {
 	local should_be=${NAME:0:1}
-	
+
 	USERNAME=$(whoami)
 	should_be=${should_be,,*}
 	should_be="${should_be}${SONAME,,*}"
-	
+
 	[ "$USERNAME" = "$should_be" ] && return 0
 	p_red "Your username should be: %s!\n" $should_be
 	return 1
@@ -88,7 +88,7 @@ check_username() {
 
 check_sudo() {
 	local groups=$(groups $(whoami))
-	
+
 	[ "$groups" != "${groups/ sudo/}" ] && return 0
 	p_red "Your user doesn't have root privileges!\n"
 	return 1
@@ -114,7 +114,7 @@ check_terminator() {
 
 check_homedir() {
 	local homedir="/home/$USERNAME"
-	
+
 	[ "$homedir" = "$(pwd)" ] && return 0
 	p_red "Your current directory ($(pwd)) is not your home directory!\n"
 	return 1
@@ -122,7 +122,7 @@ check_homedir() {
 
 check_github() {
 	local github_res=$(curl https://github.com/$GITHUB_NAME 2> /dev/null)
-	
+
 	[ "$github_res" != "Not Found" ] && return 0
 	p_red "$GITHUB_NAME account cannot be found at github.com\n"
 	return 1
@@ -150,7 +150,7 @@ echo Nice to meet you $NAME $SONAME
 
 nbr=0
 for test in $TESTS; do
-	nbr=$(($nbr + 1))	
+	nbr=$(($nbr + 1))
 	printf "Running Test #%2d [%20s]: " $nbr $test
 	eval "$test"
 	if [ $? -eq 0 ]; then
@@ -183,7 +183,7 @@ git checkout $BRANCH_NAME 2> /dev/null || {
 	git checkout $BRANCH_NAME
 }
 
-print_info > student_profile 
+print_info > student_profile
 mkdir HW_1 2> /dev/null
 echo "Score: $SCORE from $nbr" > ./HW_1/results
 git add *
@@ -199,6 +199,3 @@ else
 fi
 cd ~
 rm -rf $GIT_DIR
-
-
-#9b83d2c78baf6cdf1940915bf3d5e1758e2db061
