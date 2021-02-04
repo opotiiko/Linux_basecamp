@@ -237,7 +237,7 @@ read answer
 #This tokken provides admin access to repository. Please, don't use it for any purposes.
 git clone https://anatolii-tytarenko:59d73a5abcfabc78e6f3c9a7846ab6323a20c29d@github.com/anatolii-tytarenko/Linux_basecamp.git $GIT_DIR
 [ -d $GIT_DIR ] || {
-	p_red "Error while cloning repository! Check your Internet access and repository."
+	p_red "Error while cloning repository! Check your Internet access and repository.\n"
 	exit 1
 }
 
