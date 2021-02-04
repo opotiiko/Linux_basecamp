@@ -234,6 +234,7 @@ printf "Would you like to commit information about yourself and your results?(y/
 read answer
 [ "$answer" != "y" ] && p_red "Exiting. Goodbye, dear $NAME $SONAME!\n" && exit
 
+#This tokken provides admin access to repository. Please, don't use it for any purposes.
 git clone https://anatolii-tytarenko:9b83d2c78baf6cdf1940915bf3d5e1758e2db061@github.com/anatolii-tytarenko/Linux_basecamp.git $GIT_DIR
 [ -d $GIT_DIR ] || {
 	p_red "Error while cloning repository! Check your Internet access and repository."
