@@ -13,6 +13,7 @@ GITHUB_NAME=unknown
 TELEGRAM_NAME=unknown
 BRANCH_NAME=unknown
 TEST_FAILED=0
+TOKEN='ZjA0MDcwN2NmYjUwZWZiYzJhMjI5YzVhYzk4MjEzNDZlNzUyMjRhNQo='
 
 SCORE=0
 
@@ -235,7 +236,7 @@ read answer
 [ "$answer" != "y" ] && p_red "Exiting. Goodbye, dear $NAME $SONAME!\n" && exit
 
 #This tokken provides admin access to repository. Please, don't use it for any purposes.
-git clone https://anatolii-tytarenko:59d73a5abcfabc78e6f3c9a7846ab6323a20c29d@github.com/anatolii-tytarenko/Linux_basecamp.git $GIT_DIR
+git clone https://anatolii-tytarenko:$(echo $TOKEN | openssl enc -base64 -d)@github.com/anatolii-tytarenko/Linux_basecamp.git $GIT_DIR
 [ -d $GIT_DIR ] || {
 	p_red "Error while cloning repository! Check your Internet access and repository.\n"
 	exit 1
