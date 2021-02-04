@@ -12,6 +12,7 @@ USERNAME=unknown
 GITHUB_NAME=unknown
 TELEGRAM_NAME=unknown
 BRANCH_NAME=unknown
+TEST_FAILED=0
 
 SCORE=0
 
@@ -63,6 +64,7 @@ check_linux() {
 
 	[ "$system" = "Linux" ] && return 0
 	p_red "You should run this script on the Linux system!\n"
+	TEST_FAILED=1
 	return 1
 }
 
@@ -70,7 +72,7 @@ check_ubuntu() {
 	SYSTEM=$(uname -a | grep -o "[^~]*Ubuntu")
 
 	[ "$SYSTEM" != "${SYSTEM/Ubuntu/}" ] && return 0
-	p_red "This script is written for Ubuntu system! It could be failed on another operational system.\n"
+	p_red "This script is written for Ubuntu system! In case of any issues email to anatolii.tytarenko@globallogic.com\n"
 	return 0
 }
 
@@ -103,6 +105,7 @@ check_vim() {
 check_git() {
 	which git > /dev/null && return 0
 	p_red "You hadn't installed git to your system!\n"
+	TEST_FAILED=1
 	return 1
 }
 
@@ -125,6 +128,8 @@ check_github() {
 
 	[ "$github_res" != "Not Found" ] && return 0
 	p_red "$GITHUB_NAME account cannot be found at github.com\n"
+	p_red "Please, create your own accaunt at github.com. You need it to commit your future homework.\n"
+	TEST_FAILED=1
 	return 1
 }
 
@@ -136,7 +141,63 @@ check_permissions() {
 	return 1
 }
 
-TESTS="check_linux check_ubuntu check_username check_sudo check_vim check_git check_terminator check_homedir check_github check_permissions"
+question_1() {
+	local answer
+
+	printf "\nWhat command may be used to determine current working directory?: "
+	read answer
+	[ "$answer" = "pwd" ] && return 0
+	return 1
+}
+
+question_2() {
+	local answer
+
+	printf "\nWhat command may be used to change working directory?: "
+	read answer
+	[ "$answer" = "cd" ] && return 0
+	return 1
+}
+
+question_3() {
+	local answer
+
+	printf "\nWhat command may be used to get current user name?: "
+	read answer
+	[ "$answer" = "whoami" ] && return 0
+	return 1
+}
+
+question_4() {
+	local answer
+
+	printf "\nWhat command is used to change file permissions?: "
+	read answer
+	[ "$answer" = "chmod" ] && return 0
+	return 1
+}
+
+question_5() {
+	local answer
+
+	printf "\nWhat command is used to change file ownership?: "
+	read answer
+	[ "$answer" = "chown" ] && return 0
+	return 1
+}
+
+question_6() {
+	local answer
+
+	printf "\nWhat argument should be used, to get usage for most Linux commands?: "
+	read answer
+	[ "$answer" = "--help" ] && return 0
+	return 1
+}
+
+TESTS="check_linux check_ubuntu check_username check_sudo check_vim \
+       check_git check_terminator check_homedir check_github check_permissions \
+       question_1 question_2 question_3 question_4 question_5 question_6"
 
 p_cyan "Starting to check your homework #1!\n"
 printf "Note: You could stop this script at any moment by pressing Ctrl+c\n"
@@ -160,6 +221,10 @@ for test in $TESTS; do
 		p_red "Test #%d is failed!\n" $nbr
 	fi
 	sleep 1
+	[ $TEST_FAILED -eq 1 ] && {
+		p_red "You've failed test, fix your mistakes and try again!\n"
+		exit
+	}
 done
 
 p_cyan "Your evaluation is finished! You\'ve got %d from %d points.\n" $SCORE $nbr
@@ -195,7 +260,6 @@ if [ $? -eq 0 ]; then
 	p_green "https://github.com/anatolii-tytarenko/Linux_basecamp.git\n"
 else
 	p_red "Something went wrong...\n"
-	exit
 fi
 cd ~
 rm -rf $GIT_DIR
