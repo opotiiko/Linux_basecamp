@@ -11,6 +11,7 @@ SYSTEM=unknown
 USERNAME=unknown
 GITHUB_NAME=unknown
 TELEGRAM_NAME=unknown
+EMAIL=unknown@unknown
 BRANCH_NAME=unknown
 TEST_FAILED=0
 DEBUG_FILE=/tmp/hw_debug
@@ -208,6 +209,7 @@ get_info name NAME
 get_info soname SONAME
 get_info 'telegram name' TELEGRAM_NAME
 get_info 'github nickname' GITHUB_NAME
+get_info 'email' EMAIL
 BRANCH_NAME=${NAME,,*}.${SONAME,,*}
 echo Nice to meet you $NAME $SONAME
 
@@ -259,6 +261,11 @@ echo "Score: $SCORE from $nbr" > ./HW_1/results
 	ls -l
 	git status
 } &> $DEBUG_FILE
+git_uname=$(git config user.name)
+[ -z "$git_uname" ] && git config --global user.name "$NAME $SONAME"
+git_email=$(git config user.email)
+[ -z "$git_email" ] && git config --global user.email "$EMAIL"
+
 git add * || p_red "Error while adding changed files to commit\n"
 git status &>> $DEBUG_FILE
 git commit -m "$NAME $SONAME: Homework #1" &>> $DEBUG_FILE || p_red "Error while commiting\n"
