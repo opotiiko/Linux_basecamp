@@ -13,6 +13,7 @@ GITHUB_NAME=unknown
 TELEGRAM_NAME=unknown
 BRANCH_NAME=unknown
 TEST_FAILED=0
+DEBUG_FILE=/tmp/hw_debug
 TOKEN='ZjA0MDcwN2NmYjUwZWZiYzJhMjI5YzVhYzk4MjEzNDZlNzUyMjRhNQo='
 
 SCORE=0
@@ -253,9 +254,17 @@ git checkout $BRANCH_NAME 2> /dev/null || {
 print_info > student_profile
 mkdir HW_1 2> /dev/null
 echo "Score: $SCORE from $nbr" > ./HW_1/results
-git add *
-git commit -m "$NAME $SONAME: Homework #1"
-git push origin $BRANCH_NAME
+{
+	pwd
+	ls -l
+	git status
+} &> $DEBUG_FILE
+git add * || p_red "Error while adding changed files to commit\n"
+git status &>> $DEBUG_FILE
+git commit -m "$NAME $SONAME: Homework #1" &>> $DEBUG_FILE || p_red "Error while commiting\n"
+git branch &>> $DEBUG_FILE
+git log &>> $DEBUG_FILE
+git push origin $BRANCH_NAME &>> $DEBUG_FILE
 
 if [ $? -eq 0 ]; then
 	p_green "Your information has been successfully pushed to your personal branch $BRANCH_NAME in the following repository:\n"
